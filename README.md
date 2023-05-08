@@ -15,13 +15,13 @@ Due to the, at the best of my knowledge, absence of such a measure, I have decid
 | Accuracy        | Standard Deviation | Desired stability | DART*        |
 |:---------------:|:------------------:|:-----------------:|:------------:|
 | High            | High               | High              | ☄️✨        | 
-| High            | High               | Low               | ☄️☄️☄️✨     |
+| High            | High               | Low               | ☄️☄️☄️✨   |
 | High            | Low                | High              | ☄️☄️☄️☄️   |
-| High            | Low                | Low               | ☄️☄️☄️☄️☄️|
-| Low             | High               | Low               | ☄️✨        |
-| Low             | Low                | Low               | ☄️☄️✨      |
+| High            | Low                | Low               | ☄️☄️☄️☄️☄️ |
 | Low             | High               | High              | ☄️           |
+| Low             | High               | Low               | ☄️✨        |
 | Low             | Low                | High              | ☄️☄️☄️      |
+| Low             | Low                | Low               | ☄️☄️✨      |
 
 </div>
 <br>
