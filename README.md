@@ -15,7 +15,7 @@ Due to the, at the best of my knowledge, absence of such a measure, I have decid
 > - **T**rade-off: we are no more considering only the accuracy as our main metric, since we now have a trade-off with the variance of the model.
 
 <br>
-From now on we will assume to be using K-Fold Cross Validation, since this measure has been designed principally to be used in this setting. Since we need a proxy for the variance of the model, several trainings are needed for the same model.
+From now on we will assume to be using K-Fold Cross Validation, since this measure has been designed principally to be used in this setting and also because it is a standard when doing hyperparameters tuning. Since we need a proxy for the variance of the model, and an accurate estimate of the accuracy, several trainings are required for the same model.
 
 ---
 
@@ -25,17 +25,22 @@ Let's start by providing the formula to compute the DART-measure for a given mod
 <br>
 <br>
 
-$$ DART = \frac{1 + 1.4427\times \ln(\bar{A})}{\mathrm{e}^{\mathrm{p}D}} $$
+$$ DART_i = \frac{1 + 1.4427\times \ln(\bar{A_i})}{\mathrm{e}^{\mathrm{p}D_i}} \quad\quad i = 1, ..., \lvert G \rvert $$
 <br>
 
+where $\lvert G \rvert$ is the number of possible configurations given by our hyperparameters grid, i.e. the number of models we will test.
+<br>
+<br>
+
+
 > PARAMETERS
-> - A: accuracy of the model, computed as the Mean of the *k* accuracies;<br>
+> - $\bar{A_i}$: mean accuracy of model *i*, computed with respect to the *k* accuracies given by K-Fold Cross Validation;<br>
 > 
-> $$ \bar{A} = \frac{1}{\mathrm{k}}\sum_{i=1}^{\mathrm{k}} A_i $$
+> $$ \bar{A_i} = \frac{1}{\mathrm{k}}\sum_{j}A_{ij} \quad\quad j = 1,..., \mathrm{k} $$
 >
-> - D: deviation of the model, computed as the Standard Error (SE) of the mean;<br>
+> - $D_i$: standard deviation of the model, computed with respect to the *k* accuracies;<br>
 >
-> $$ D = \frac{s}{\sqrt{\mathrm{k}}} $$
+> $$ D_i = \sqrt{\frac{\sum_{j}(A_{ij}-\bar{A_i})^2}{(\mathrm{k}-1)}} \quad\quad j = 1,..., \mathrm{k} $$
 >
 > - p: desired precision, fixed and representative of how much importance we give to the stability of the model.
 
@@ -45,9 +50,47 @@ How is the value of the DART-measure related to its inputs? Ideally, it should a
 
 
 
-Of course, this is just a way of combining the two statistics, and there are plenty of other ways to do that. Nevertheless, the proposed measure gives enough flexibility to choose which characteristic the desired model should have. A important parameter that allows to try several different configurations is the *precision*, which is a positive real number that represents the importance we give to the stability of the model. Notice that by setting this last value to zero, we come back to the usual case in which we observe just the accuracy; this means we can generalize pretty easily, not bad! 
+Of course, this is just a way of combining the two statistics, and there are plenty of other ways to do that. Nevertheless, the proposed measure gives enough flexibility to choose which characteristic the desired model should have. A important parameter that allows to try several different configurations is the *precision*, which is a positive real number that represents the importance we give to the stability of the model. 
 
-A general, qualitative, behaviour can be found in the following table:
+---
+
+<h2 style="text-align:left;"> Values, parameters and how to interpret </h2>
+
+Let's see now the values the DART-measure can assume by first providing a table to get a quick understanding of how this measure behaves. We use '-' when we don't want to take care of a certain variable on a specific row. Two distinct tables would have been hideous.
+<br>
+<br>
+
+<div align = "center">
+
+|Numerator        |Denominator        |Accuracy       |Standard Deviation |Performance     |
+|:---------------:|:-----------------:|:-------------:|:-----------------:|:--------------:|
+|1                |-                  |1              |-                  |Very Accurate   |
+|0                |-                  |0.5            |-                  |Random Guessing |
+|< 0              |-                  |< 0.5          |-                  |Worst Gambler   |
+|-                |1                  |-              |0                  |Very stable     |
+|-                |> 1                |-              |> 0                |Variance Penalty|
+|-                |>>> 1              |-              |>> 0               |Shaking         |
+  
+</div>
+
+<br>
+<br>
+
+**NUMERATOR**
+- It assumes its biggest value when the accuracy is 1, and its lowest value when the accuracy is 0.5, i.e. random guessing;
+- It assumes negative values whenever the performance is worse than random guessing (REALLY BAD MODEL).
+
+**DENOMINATOR**
+- It increases exponentially with the standard deviation. It assumes its lowest value when there is no variance;
+- It has not an upper bound, so it can increase without limit depending on the variance.
+<br>
+
+Summarizing, what this measure does is trying to strike a balance between the accuracy and the stability of a model, making the variance weigh more depending on the precision required by the problem. It is also very nice to observe that its values are normalized between 0 and 1. <br>
+Finally, we are also allowed to change the value of the precision, gaining a lot of flexibility. Notice that by setting it to zero, we go back to the usual case in which we ponder just the accuracy; this means we can generalize pretty easily, not bad!
+<br>
+<br>
+
+A general, qualitative, behaviour that takes into account all the parameters is shown in the following table:
 <br>
 <br>
 <div align = "center">
