@@ -28,7 +28,7 @@ Let's start by providing the formula to compute the DART-measure for a given mod
 $$ DART_i = \frac{1 + 1.4427\times \ln(\bar{A_i})}{\mathrm{e}^{\mathrm{p}D_i}} \quad\quad i = 1, ..., \lvert G \rvert $$
 <br>
 
-where $\lvert G \rvert$ is the number of possible configurations given by our hyperparameters grid, i.e. the number of models we will test.
+where $\lvert G \rvert$ is the **number of possible configurations** given by our hyperparameters grid, i.e. how many models we will test.
 <br>
 <br>
 
@@ -50,7 +50,7 @@ How is the value of the DART-measure related to its inputs? Ideally, it should a
 
 
 
-Of course, this is just a way of combining the two statistics, and there are plenty of other ways to do that. Nevertheless, the proposed measure gives enough flexibility to choose which characteristic the desired model should have. A important parameter that allows to try several different configurations is the *precision*, which is a positive real number that represents the importance we give to the stability of the model. 
+Of course, this is just a way of combining the two statistics, and there are plenty of other ways to do that. Nevertheless, the proposed measure gives enough **flexibility** to choose which characteristic the desired model should have. An important parameter that allows to try several different configurations is the *precision*, which is a positive real number that represents the importance we give to the stability of the model. 
 
 ---
 
@@ -85,7 +85,7 @@ Let's see now the values the DART-measure can assume by first providing a table 
 - It has not an upper bound, so it can increase without limit depending on the variance.
 <br>
 
-Summarizing, what this measure does is trying to strike a balance between the accuracy and the stability of a model, making the variance weigh more depending on the precision required by the problem. It is also very nice to observe that its values are normalized between 0 and 1. <br>
+Summarizing, what this measure does is trying to **strike a balance** between the accuracy and the stability of a model, making the variance weigh more depending on the precision required by the problem. It is also very nice to observe that its values are normalized between 0 and 1. <br>
 Finally, we are also allowed to change the value of the precision, gaining a lot of flexibility. Notice that by setting it to zero, we go back to the usual case in which we ponder just the accuracy; this means we can generalize pretty easily, not bad!
 <br>
 <br>
